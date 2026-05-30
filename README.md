@@ -1,2 +1,2 @@
-# Wisdom
-Faith based
+javac SDGInfoEnhanced.java
+java SDGInfoEnhanced
