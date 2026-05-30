@@ -1,2 +1,1 @@
-javac SDGInfoEnhanced.java
-java SDGInfoEnhanced
+index.html
