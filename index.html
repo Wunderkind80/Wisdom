@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SDG Spinner 🌍</title>
+  <style>
+    :root{
+      --bg:#071018;
+      --card:#0f1720;
+      --muted:#9aa6b2;
+      --glass: rgba(255,255,255,0.03);
+      --radius:14px;
+      --max-width:960px;
+      --sdg-font: 800 1.25rem/1 "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background:
+        radial-gradient(800px 400px at 10% 10%, rgba(99,102,241,0.06), transparent),
+        radial-gradient(700px 350px at 90% 90%, rgba(16,185,129,0.03), transparent),
+        var(--bg);
+      color:#e6eef3;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:48px 20px;
+    }
+
+    .wrap{
+      width:100%;
+      max-width:var(--max-width);
+      text-align:center;
+    }
+
+    header{
+      margin-bottom:20px;
+    }
+    h1{
+      margin:0;
+      font-size:clamp(1.6rem, 3.2vw, 2.4rem);
+      font-weight:800;
+      letter-spacing:-0.02em;
+    }
+    p.lead{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size:clamp(0.95rem,1.2vw,1.05rem);
+    }
+
+    main{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:28px;
+      flex-direction:column;
+      margin-top:18px;
+    }
+
+    .spin-btn{
+      --size: min(260px, 36vmin);
+      width:var(--size);
+      height:var(--size);
+      border-radius:50%;
+      border:0;
+      cursor:pointer;
+      display:inline-grid;
+      place-items:center;
+      font-size:clamp(1.05rem,2.6vw,1.2rem);
+      font-weight:800;
+      color:white;
+      background:conic-gradient(from 210deg, #e5243b, #dda63a, #4c9f38, #c5192d, #ffd400, #3f7eab, #f7b500, #0077b6);
+      box-shadow: 0 14px 40px rgba(2,6,23,0.6), inset 0 -6px 20px rgba(0,0,0,0.2);
+      transition:transform 420ms cubic-bezier(.2,.9,.3,1), box-shadow 200ms;
+      text-shadow: 0 1px 0 rgba(0,0,0,0.25);
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .spin-btn:active { transform:translateY(4px) scale(.995) }
+    .spin-btn:focus{ outline: 3px solid rgba(97,218,251,0.12); outline-offset:6px; border-radius:50%; }
+
+    .spin-btn.spin-anim{
+      animation:spin-button 700ms ease;
+    }
+    @keyframes spin-button{
+      0%{ transform:rotate(0) scale(1) }
+      40%{ transform:rotate(20deg) scale(1.03) }
+      100%{ transform:rotate(0) scale(1) }
+    }
+
+    .result{
+      width:100%;
+      max-width:880px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      padding:20px 22px;
+      box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+      border: 1px solid rgba(255,255,255,0.03);
+      display:grid;
+      grid-template-columns: 80px 1fr;
+      gap:18px;
+      align-items:start;
+      margin-top:18px;
+      opacity:0;
+      transform: translateY(8px);
+      transition: opacity 420ms ease, transform 420ms ease;
+    }
+
+    .result.show{
+      opacity:1;
+      transform: translateY(0);
+    }
+
+    .sdg-number{
+      width:72px;
+      height:72px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      font-size:1.2rem;
+      color: #062027;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.92));
+      box-shadow: 0 6px 16px rgba(2,6,23,0.5);
+    }
+
+    .sdg-title{
+      margin:0;
+      font: var(--sdg-font);
+      font-size:1.05rem;
+      letter-spacing:-0.01em;
+    }
+
+    .sdg-fact{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size:0.98rem;
+    }
+
+    .sdg-action{
+      margin-top:12px;
+      background: rgba(255,255,255,0.02);
+      padding:10px 12px;
+      border-radius:10px;
+      display:inline-block;
+      color:#dff8ec;
+      font-weight:700;
+      font-size:0.95rem;
+      backdrop-filter: blur(6px);
+    }
+
+    footer{
+      margin-top:18px;
+      color:var(--muted);
+      font-size:0.85rem;
+    }
+
+    /* responsive adjustments */
+    @media (max-width:640px){
+      .result{ grid-template-columns: 64px 1fr; padding:16px; gap:12px;}
+      .sdg-number{ width:64px; height:64px; font-size:1rem; border-radius:10px;}
+      .sdg-title{ font-size:1rem}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" role="application">
+    <header>
+      <h1>SDG Spinner 🌍</h1>
+      <p class="lead">Click the button to discover a Sustainable Development Goal and a small action you can take today</p>
+    </header>
+
+    <main>
+      <button id="spin" class="spin-btn" aria-label="Spin to discover an SDG">Spin</button>
+
+      <div id="result" class="result" aria-live="polite" aria-atomic="true" hidden>
+        <div id="num" class="sdg-number">1</div>
+        <div>
+          <h2 id="title" class="sdg-title">No Poverty</h2>
+          <div id="fact" class="sdg-fact">Fact about the SDG will appear here.</div>
+          <div id="action" class="sdg-action" role="note">Simple action suggestion</div>
+        </div>
+      </div>
+
+      <footer>
+        Tip: Press Enter or Space while the button is focused to spin.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    // All 17 SDGs with a short fact and one simple action
+    const SDGS = [
+      {num:1, name:"No Poverty", color:"#E5243B",
+       fact:"Poverty prevents many people from accessing basics like food, housing, education and healthcare.",
+       action:"Donate to or volunteer with a local food bank, shelter, or microfinance organization today."},
+
+      {num:2, name:"Zero Hunger", color:"#DDA63A",
+       fact:"Despite sufficient global food production, millions still face chronic hunger and malnutrition.",
+       action:"Reduce food waste at home — plan meals, preserve leftovers, or compost scraps."},
+
+      {num:3, name:"Good Health and Well-being", color:"#4C9F38",
+       fact:"Preventable illnesses and unequal access to healthcare still cause avoidable suffering and early deaths.",
+       action:"Schedule a check-up, get a recommended vaccine, or donate blood if you're able."},
+
+      {num:4, name:"Quality Education", color:"#C5192D",
+       fact:"Quality primary and secondary education remains out of reach for many children around the world.",
+       action:"Volunteer to tutor, donate books or school supplies, or support a literacy program."},
+
+      {num:5, name:"Gender Equality", color:"#FF3A21",
+       fact:"Women and girls face persistent gaps in education, pay, leadership and protection from violence.",
+       action:"Support a women-led business, mentor a woman or girl, or call out biased language."},
+
+      {num:6, name:"Clean Water and Sanitation", color:"#26BDE2",
+       fact:"Many communities still lack safely managed drinking water and sanitation services, harming health.",
+       action:"Fix household leaks, take shorter showers, or support clean-water projects locally."},
+
+      {num:7, name:"Affordable and Clean Energy", color:"#FCC30B",
+       fact:"Reliable, clean energy access powers opportunity but remains unavailable for millions.",
+       action:"Swap a bulb to LED or reduce energy use today by unplugging unused chargers/appliances."},
+
+      {num:8, name:"Decent Work and Economic Growth", color:"#A21942",
+       fact:"Decent work and fair wages are essential for inclusive growth but are out of reach for many workers.",
+       action:"Support local businesses, hire locally, or offer mentorship to someone seeking work."},
+
+      {num:9, name:"Industry, Innovation and Infrastructure", color:"#FD6925",
+       fact:"Resilient infrastructure and innovation are key to economic development and disaster resilience.",
+       action:"Choose products from companies investing in sustainable, repairable designs or local manufacturing."},
+
+      {num:10, name:"Reduced Inequalities", color:"#DD1367",
+       fact:"Inequalities in income, opportunity and treatment persist within and between countries.",
+       action:"Support inclusive organizations and share opportunities with underrepresented people in your network."},
+
+      {num:11, name:"Sustainable Cities and Communities", color:"#FD9D24",
+       fact:"Cities face challenges like pollution, congestion and lack of affordable housing as populations grow.",
+       action:"Use public transport, walk or bike for short trips to lower emissions and congestion today."},
+
+      {num:12, name:"Responsible Consumption and Production", color:"#BF8B2E",
+       fact:"Unsustainable production and consumption deplete resources and generate large amounts of waste.",
+       action:"Choose reusable items, avoid single-use plastics, and buy only what you need."},
+
+      {num:13, name:"Climate Action", color:"#3F7EAB",
+       fact:"Rising greenhouse gas emissions are driving climate change and intensifying extreme weather events.",
+       action:"Reduce car trips, conserve energy, or contact local representatives to support climate policies."},
+
+      {num:14, name:"Life Below Water", color:"#0A97D9",
+       fact:"Oceans and marine life are threatened by pollution, overfishing and warming seas.",
+       action:"Avoid single-use plastics, pick up litter near waterways, or choose sustainable seafood."},
+
+      {num:15, name:"Life on Land", color:"#56C02B",
+       fact:"Deforestation, land degradation and habitat loss put species and ecosystems at risk.",
+       action:"Plant a native tree or support a local reforestation or habitat-protection group."},
+
+      {num:16, name:"Peace, Justice and Strong Institutions", color:"#00689D",
+       fact:"Peaceful, just and inclusive institutions underpin safe, fair and stable societies.",
+       action:"Participate in local civic life, stay informed, and support organizations that defend justice and transparency."},
+
+      {num:17, name:"Partnerships for the Goals", color:"#19486A",
+       fact:"Cross-sector partnerships accelerate progress by pooling knowledge, finance and expertise.",
+       action:"Join or support collaborative local initiatives, or share resources and skills with community groups."}
+    ];
+
+    const spinBtn = document.getElementById('spin');
+    const result = document.getElementById('result');
+    const numEl = document.getElementById('num');
+    const titleEl = document.getElementById('title');
+    const factEl = document.getElementById('fact');
+    const actionEl = document.getElementById('action');
+
+    let lastIndex = -1;
+
+    function pickRandomIndex(){
+      if(SDGS.length === 1) return 0;
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * SDGS.length);
+      } while(idx === lastIndex);
+      return idx;
+    }
+
+    function showGoal(idx){
+      const sdg = SDGS[idx];
+      lastIndex = idx;
+
+      // update visuals
+      numEl.textContent = sdg.num;
+      numEl.style.background = sdg.color;
+      numEl.style.color = '#fff';
+      numEl.style.boxShadow = '0 8px 18px rgba(0,0,0,0.5)';
+
+      titleEl.textContent = sdg.name;
+      titleEl.style.color = sdg.color;
+      factEl.textContent = sdg.fact;
+      actionEl.textContent = "Action: " + sdg.action;
+
+      // reveal with fade-in
+      result.hidden = false;
+      // reset and force reflow to retrigger transition
+      result.classList.remove('show');
+      void result.offsetWidth;
+      result.classList.add('show');
+
+      // add a short pulse animation to the action for attention
+      actionEl.animate([
+        { transform: 'translateY(6px)', opacity: 0.0 },
+        { transform: 'translateY(0)', opacity: 1 }
+      ], { duration: 420, easing: 'ease-out' });
+    }
+
+    function spin(){
+      // visual feedback on button
+      spinBtn.classList.remove('spin-anim');
+      void spinBtn.offsetWidth;
+      spinBtn.classList.add('spin-anim');
+
+      const idx = pickRandomIndex();
+      // small timeout to let button spin then reveal result
+      setTimeout(() => showGoal(idx), 180);
+    }
+
+    // keyboard accessibility: Enter/Space on button
+    spinBtn.addEventListener('click', spin);
+    spinBtn.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        spin();
+      }
+    });
+
+    // reveal a random goal on first load to invite interaction
+    // (kept hidden until first spin for explicit interaction)
+    // Optionally, you can uncomment the line below to show one on load:
+    // showGoal(Math.floor(Math.random() * SDGS.length));
+  </script>
+</body>
+</html>
